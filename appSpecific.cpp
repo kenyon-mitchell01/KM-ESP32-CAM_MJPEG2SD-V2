@@ -74,6 +74,7 @@ bool updateAppStatus(const char* variable, const char* value, bool fromUser) {
     bool useGdrive = (bool)intVal;
   // Set preference for Google Drive over FTP/HTTPS
   if (useGdrive) updateStatus("fsUse", "1"); // Enable HTTPS for Google Drive
+  }
   else if (!strcmp(variable, "upload")) fsStartTransfer(value); //Not sure if I need to keep or delete this to use google server
 #endif
   else if (!strcmp(variable, "delete")) {
