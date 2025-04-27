@@ -9,6 +9,7 @@
 // s60sc 2022 - 2024
 
 #include "appGlobals.h"
+#include "gDriveUpload.h"
 
 static char variable[FILE_NAME_LEN]; 
 static char value[FILE_NAME_LEN];
@@ -68,7 +69,12 @@ bool updateAppStatus(const char* variable, const char* value, bool fromUser) {
   else if (!strcmp(variable, "lswitch")) nightSwitch = intVal;
 #endif
 #if INCLUDE_FTP_HFS
-  else if (!strcmp(variable, "upload")) fsStartTransfer(value); 
+  else if (!strcmp(variable, "google_script_id")) configureGDrive(value);
+  else if (!strcmp(variable, "use_gdrive")) {
+    bool useGdrive = (bool)intVal;
+  // Set preference for Google Drive over FTP/HTTPS
+  if (useGdrive) updateStatus("fsUse", "1"); // Enable HTTPS for Google Drive
+  else if (!strcmp(variable, "upload")) fsStartTransfer(value); //Not sure if I need to keep or delete this to use google server
 #endif
   else if (!strcmp(variable, "delete")) {
     stopPlayback = true;
@@ -790,6 +796,8 @@ fsServer~~99~~na
 ftpUser~~99~~na
 fsWd~~99~~na
 fsUse~~99~~na
+google_script_id~~2~T~Google Script ID for Drive upload
+use_gdrive~0~2~C~Use Google Drive for uploads
 smtp_port~465~99~~na
 smtp_server~smtp.gmail.com~99~~na
 smtp_login~~99~~na

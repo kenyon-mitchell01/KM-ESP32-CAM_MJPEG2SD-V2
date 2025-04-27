@@ -3,6 +3,7 @@
 // s60sc 2022, 2023
 
 #include "appGlobals.h"
+#include "gDriveUpload.h"
 
 #if INCLUDE_FTP_HFS
 #if (!INCLUDE_CERTS)
@@ -375,9 +376,25 @@ bool fsStartTransfer(const char* fileFolder) {
   setFolderName(fileFolder, storedPathName);
   if (!uploadInProgress) {
     uploadInProgress = true;
-    if (fsHandle == NULL) xTaskCreate(&fileServerTask, "fileServerTask", FS_STACK_SIZE, NULL, FTP_PRI, &fsHandle);    
-    debugMemory("fsStartTransfer");
-    return true;
+    
+    // Check if we should use Google Drive
+    bool useGdriveUpload = false;
+    char value[4];
+    if (retrieveConfigVal("use_gdrive", value)) {
+      useGdriveUpload = atoi(value) > 0;
+    }
+    
+    if (useGdriveUpload) {
+      // Direct upload to Google Drive
+      bool success = uploadToGoogleDrive(storedPathName);
+      uploadInProgress = false;
+      return success;
+    } else {
+      // Original FTP/HTTPS transfer
+      if (fsHandle == NULL) xTaskCreate(&fileServerTask, "fileServerTask", FS_STACK_SIZE, NULL, FTP_PRI, &fsHandle);    
+      debugMemory("fsStartTransfer");
+      return true;
+    }
   } else LOG_WRN("Unable to transfer %s as another transfer in progress", storedPathName);
   return false;
 }
