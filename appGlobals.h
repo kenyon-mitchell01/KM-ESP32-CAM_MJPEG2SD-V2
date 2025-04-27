@@ -57,7 +57,7 @@
 #define INCLUDE_MQTT false    // mqtt.cpp (MQTT)
 #define INCLUDE_HASIO false   // mqtt.cpp (Send home assistant discovery messages). Needs INCLUDE_MQTT true
 
-#define INCLUDE_CERTS true   // certificates.cpp (https and server certificate checking)
+#define INCLUDE_CERTS false   // certificates.cpp (https and server certificate checking)
 #define INCLUDE_UART false    // uart.cpp (use another esp32 as Auxiliary connected via UART)
 #define INCLUDE_TELEM false   // telemetry.cpp (real time data collection). Needs INCLUDE_I2C true
 #define INCLUDE_WEBDAV false  // webDav.cpp (WebDAV protocol)
