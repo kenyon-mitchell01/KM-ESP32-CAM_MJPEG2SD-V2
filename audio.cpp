@@ -35,12 +35,12 @@ I2SClass I2Sstd;
 i2s_port_t MIC_CHAN = I2S_NUM_1;
 i2s_port_t AMP_CHAN = I2S_NUM_0;
 
-static bool micUse = false; // esp mic available
+static bool micUse = true; // esp mic available
 bool micRem = false; // use browser mic (depends on app)
 static bool ampUse = false; // whether esp amp / speaker available
 bool spkrRem = false; // use browser speaker
 bool volatile stopAudio = false;
-static bool micRecording = false;
+static bool micRecording = true;
 
 // I2S devices
 bool I2Smic; // true if I2S, false if PDM
@@ -49,8 +49,8 @@ bool I2Smic; // true if I2S, false if PDM
 // INMP441 I2S microphone pinout, connect L/R to GND for left channel
 // MP34DT01 PDM microphone pinout, connect SEL to GND for left channel
 int micSckPin = -1; // I2S SCK
-int micSWsPin = -1; // I2S WS, PDM CLK
-int micSdPin = -1;  // I2S SD, PDM DAT
+int micSWsPin = 42; // I2S WS, PDM CLK
+int micSdPin = 41;  // I2S SD, PDM DAT
 
 // I2S Amplifier pins
 // MAX98357A 
@@ -62,7 +62,7 @@ int mampSdIo = -1;   // I2S DIN
 
 int ampTimeout = 1000; // ms for amp write abandoned if no output
 uint32_t SAMPLE_RATE = 16000;  // audio rate in Hz
-int micGain = 0;  // microphone gain 0 is off 
+int micGain = 3;  // microphone gain 0 is off 
 int8_t ampVol = 0; // amplifier volume factor 0 is off
 
 TaskHandle_t audioHandle = NULL;
