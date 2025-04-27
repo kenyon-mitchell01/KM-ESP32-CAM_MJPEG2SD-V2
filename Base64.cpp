@@ -51,3 +51,10 @@ String Base64::encode(uint8_t * data, size_t length) {
 String Base64::encode(String text) {
   return encode((uint8_t*)text.c_str(), text.length());
 }
+
+// For compatibility with HTTPClient
+namespace base64 {
+  String encode(String text) {
+    return Base64::encode(text);
+  }
+}

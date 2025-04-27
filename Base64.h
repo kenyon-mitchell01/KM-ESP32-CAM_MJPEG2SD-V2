@@ -9,4 +9,9 @@ class Base64 {
     static String encode(String text);
 };
 
+// For compatibility with HTTPClient
+namespace base64 {
+  String encode(String text);
+}
+
 #endif
