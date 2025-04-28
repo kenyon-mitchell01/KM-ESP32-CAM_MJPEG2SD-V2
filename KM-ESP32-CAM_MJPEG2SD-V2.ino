@@ -6,6 +6,7 @@
 */
 
 #include "appGlobals.h"
+#include "wireguardClient.h"
 
 void setup() {
   logSetup();
@@ -32,6 +33,12 @@ void setup() {
 
   // connect wifi or start config AP if router details not available
   startWifi();
+
+    // Add this code after WiFi connection
+  if (WiFi.status() == WL_CONNECTED) {
+    // Only try to set up WireGuard if WiFi is connected
+    setupWireGuard();
+  }
 
   startWebServer();
   if (strlen(startupFailure)) LOG_WRN("%s", startupFailure);
@@ -83,6 +90,10 @@ void setup() {
 void loop() {
   // confirm not blocked in setup
   LOG_INF("=============== Total tasks: %u ===============\n", uxTaskGetNumberOfTasks() - 1);
+   
+  // Add this line to maintain WireGuard connection
+  maintainWireGuard();
+
   delay(1000);
   vTaskDelete(NULL); // free 8k ram
 }
